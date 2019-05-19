@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+<head>
+<head>
+	<title>Status</title>
+	<link rel="icon" type="image/png" href="/lectio">
+	<link rel="stylesheet" type="text/css" href="/loading-bar.css"/>
+	<script type="text/javascript" src="/loading-bar.js"></script>
+</head>
+<body>
+	<div style="width: 100%;height: fit-content;display: flex;flex-direction: column-reverse;">
+		<h3 id="dokumenter" style="order:0;width:100%;text-align: center;">Søger efter filer i dokumenter: 0/0</h3>
+		<h3 id="opgaver" style="order: -1;width:100%;text-align: center;">Søger efter filer i opgaver: 0/0</h3>
+		<h3 id="downloads" style="order: -2;width:100%;text-align: center;">Filer downloaded: 0/0</h3>
+		<div id="dokumenter-bar" style="order: 1;width: 50%; height: 50%;margin: auto;top: 50%;" data-preset="rainbow"class="ldBar label-center"data-value="0"></div>
+	</div>
+	<h1 id='Færdig' style="display: none;text-align: center;font-family: arial;font-size: 600%;">Færdig!</h1>
+	<h2 id='Færdig2' style="display: none;text-align: center;font-family: arial;">Programmet lukker og slettes af sig selv...</h2>
+	<style type="text/css">
+		.ldBar-label {
+			color: #2c3e50;
+			font-family: Comic Sans MS;
+			font-size: 250%;
+			font-weight: 900
+		}
+		h3 {
+			color: #95a5a6;
+			font-family: arial;
+			font-size: 100%;
+		}
+</style>
+
+</body>
+<script type="text/javascript" src="/io"></script>
+<script type="text/javascript">
+	var socket = io();
+	var bar = new ldBar(document.querySelectorAll(".ldBar")[0])
+	socket.on('Dokumenter', (update) => {
+		document.querySelector('#dokumenter').style.color = "#2c3e50"
+		document.querySelector('#dokumenter').innerHTML = 'Søger efter filer i dokumenter: '+update;
+		update=(update.split('/')[0]/update.split('/')[1]*100)
+		bar.set(update)
+	})
+	socket.on('Opgaver', (update) => {
+		document.querySelector('#opgaver').style.color = "#2c3e50"
+		document.querySelector('#dokumenter').innerText = "Søger efter filer i dokumenter: ✓"
+		document.querySelector('#dokumenter').style.color = "rgb(0, 154, 34)"
+		document.querySelector('#opgaver').innerHTML = 'Søger efter filer i opgaver: '+update;
+		update=(update.split('/')[0]/update.split('/')[1]*100)
+		bar.set(update)
+	})
+	socket.on('Downloading', (update) => {
+		document.querySelector('#downloads').style.color = "#2c3e50"
+		document.querySelector('#dokumenter').innerText = "Søger efter filer i dokumenter: ✓"
+		document.querySelector('#dokumenter').style.color = "rgb(0, 154, 34)"
+		document.querySelector('#opgaver').innerText = "Søger efter filer i opgaver: ✓"
+		document.querySelector('#opgaver').style.color = "rgb(0, 154, 34)"
+		document.querySelector('#downloads').innerHTML = 'Filer downloaded: '+update;
+		update=(update.split('/')[0]/update.split('/')[1]*100)
+		bar.set(update)
+	})
+	socket.on('Færdig', (update) => {
+		document.querySelector('#dokumenter').innerText = "Søger efter filer i dokumenter: ✓"
+		document.querySelector('#dokumenter').style.color = "rgb(0, 154, 34)"
+		document.querySelector('#opgaver').innerText = "Søger efter filer i opgaver: ✓"
+		document.querySelector('#opgaver').style.color = "rgb(0, 154, 34)"
+		document.querySelector('#downloads').innerText = "Filer downloaded: ✓"
+		document.querySelector('#downloads').style.color = "rgb(0, 154, 34)"
+		document.querySelectorAll(".ldBar")[0].style.display='none'
+		document.querySelector('#Færdig').style.display = "";
+		document.querySelector('#Færdig2').style.display = "";
+	})
+</script>
+</html>
