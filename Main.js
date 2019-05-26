@@ -29,6 +29,13 @@ var userdelay = '1000';
 //but dont touch anything else!
 //
 //
+
+var start_var = 'start '
+if(process.platform != 'win32')
+	start_var = 'open '
+
+var files_to_be_deleted = ['index.js', 'package-lock.json', 'README.md', 'run_mac.command', 'run_windows.bat', 'Main.js', 'Resources', 'node_modules', '.DS_Store', 'package.json']
+
 app.get('/lectio', (req, res) => {
 	res.sendFile(__dirname + '/Resources/lectio.png');
 })
@@ -103,7 +110,7 @@ io.on('connection', function(socket) {
 });
 
 http.listen(1234, function() {
-	exec('start http://127.0.0.1:1234/')
+	exec(start_var+'http://127.0.0.1:1234/')
 });
 
 
@@ -424,21 +431,49 @@ function statusio(mode, msg){
 	}
 }
 function removeall() {
-	var files = fs.readdirSync('./')
-	if (files.indexOf(username) != -1) {
-		files.splice(files.indexOf(username), 1);
-	}
-	var string='@echo off\ntitle Deleting...\ncolor 0a\ntimeout /t 10 /nobreak\n'
-	var nr = 0;
-	checkiffolderorfile()
-	function checkiffolderorfile() {
-		fs.lstat(files[nr], (err, success) => {
-			if(success.isFile()){
-				string=string+'del '+files[nr]+'\n'
-			}else{
-				string=string+'rmdir '+files[nr]+' /s /q\n'
+	if (process.platform=='win32') {
+		var files = fs.readdirSync('./')
+		if (files.indexOf(username) != -1) {
+			files.splice(files.indexOf(username), 1);
+		}
+		var string='@echo off\ntitle Deleting...\ncolor 0a\ntimeout /t 10 /nobreak\n'
+		var nr = 0;
+		checkiffolderorfile()
+		function checkiffolderorfile() {
+			fs.lstat(files[nr], (err, success) => {
+				if(files_to_be_deleted.includes(files[nr])) {
+					if(success.isFile()){
+						string=string+'del '+files[nr]+'\n'
+					}else{
+						string=string+'rmdir '+files[nr]+' /s /q\n'
+					}
+				}
+				if(nr==files.length-1){fs.writeFile('del.bat', string+'echo Alle dine filer er nu gemt i '+username+' og du kan nu lukke denne terminal!\ndel del.bat', (err)=>{if(err){console.log(err)}else{setTimeout(function(){process.exit()},5000);exec('start del.bat')}})}else{nr++;checkiffolderorfile()}
+			})
+		}
+	} else {
+		var delete_file_name = '/del.command'
+
+		var files = fs.readdirSync(__dirname)
+		console.clear()
+		console.log('I can see: ')
+		console.log(files)
+
+		var script = 'echo sletter...\nsleep 5\n'
+
+		for (var i = 0; i < files.length; i++) {
+			if (files_to_be_deleted.includes(files[i])) {
+				script += 'rm -r '+String(__dirname+'/'+files[i])
+				script += '\n'
 			}
-			if(nr==files.length-1){fs.writeFile('del.bat', string+'echo Alle dine filer er nu gemt i '+username+' og du kan nu lukke denne terminal!\ndel del.bat', (err)=>{if(err){console.log(err)}else{setTimeout(function(){process.exit()},5000);exec('start del.bat')}})}else{nr++;checkiffolderorfile()}
-		})
+		}
+
+		script += 'rm -r '+String(__dirname+delete_file_name)
+		script += '\nkillall -e Terminal'
+
+		fs.writeFileSync(__dirname+delete_file_name, script)
+		exec('chmod 777 '+__dirname+delete_file_name)
+		exec('open '+__dirname+delete_file_name)
+		setTimeout(function() {process.exit()}, 2000);
 	}
 }
