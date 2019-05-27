@@ -1,4 +1,4 @@
-Der er blevet brugt adskillige timer på dette projekt, så hvis du har overskud på bankkontoen ville en donation være værdsat :pray::+1:
+Der er blevet brugt adskillige timer på dette projekt, så hvis du har overskud på bankkontoen ville en donation være værdsat :pray::+1: Paypal: friis@post.com, mobilepay: 27725380 :kissing_heart:
 
 # Lectio-Self-Checkout-Nodejs
 
