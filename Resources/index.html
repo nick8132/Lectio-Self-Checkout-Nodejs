@@ -64,7 +64,7 @@ img.icon {
 
   <div class="container">
     <label for="uname"><b>Delay</b></label>
-    <input type="text" value="1000" name="Delay" readonly style="border: 1px dashed #ccc;color: #a9a9a9">
+    <input onclick="askuser()" type="text" value="1000" name="Delay" readonly style="border: 1px dashed #ccc;color: #a9a9a9">
 
     <label for="uname"><b>Brugernavn</b></label>
     <input type="text" placeholder="Indtast Brugernavn..." name="Username" required>
@@ -77,4 +77,18 @@ img.icon {
 </form>
 
 </body>
+<script type="text/javascript">
+  function askuser() {
+    var ans = prompt('---WARNING---\nDette kan være farligt hvis du ikke er på skolen\nHvis du vil forsætte skal du skrive "ja"\n---WARNING---', 'nej')
+    if(ans == 'ja'){
+      change()
+    }
+  }
+  function change() {
+    document.querySelector('input').removeAttribute('readonly');
+    document.querySelector('input').type = 'number'
+    document.querySelector('input').onclick = ''
+    document.querySelector('input').min = '250'
+  }
+</script>
 </html>
