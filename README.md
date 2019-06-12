@@ -22,7 +22,7 @@ Heldigvis for dig har vi lavet et program som hurtigt og effektivt kan snuppe al
 Ja! Selvfølgelig kan du det! Men hvis du ikke tror på os, kan du da bare kigge vores kode igennem.
 
 - [x] Vi kommunikerer udelukkende med lectio under processen.
-- [x] Dit kodeord eller filer bliver ikke offentligt gjort på noget tidspunkt.
+- [x] Dit kodeord eller filer bliver ikke offentligtgjort på noget tidspunkt.
 - [x] Det er kun dine og absolut kun dine filer du kan downloade!
 - [x] Alt overflødeligt bliver slettet når programmet er færdigt.
 - [x] Programmet ved godt hvad den må slette, så hvis du ved en fejl kommer til at ligge programmet sammen med andre filer, sletter programmet stadig kun sig selv
